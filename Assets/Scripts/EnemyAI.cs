@@ -1,4 +1,6 @@
 
+using Unity.Collections;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -28,6 +30,10 @@ public class EnemyAiTutorial : MonoBehaviour
     [Header("projectile stuff")]
     public GameObject projectilePrefab;
     public Transform attackPoint; // A point from which the projectile spawns
+
+    [Range(0, 360)]
+    public float angle;
+    public float radius;
 
     private void Awake()
     {
@@ -63,16 +69,26 @@ public class EnemyAiTutorial : MonoBehaviour
 
     private bool HasLineOfSight()
     {
-        Vector3 directionToPlayer = (player.position - transform.position).normalized;
-        float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+        Collider[] rangeChecks = Physics.OverlapSphere(transform.position, radius, whatIsPlayer);
 
-        // Raycast from enemy to player
+        if(rangeChecks.Length != 0)
+        {
+            Transform target = rangeChecks[0].transform;
+            Vector3 directionToPlayer = (player.position - transform.position).normalized;
+
+            if(Vector3.Angle(transform.forward, directionToPlayer) < angle / 2)
+            {
+                float distanceToPlayer = Vector3.Distance(transform.position, player.position);
+
+                        // Raycast from enemy to player
         if (Physics.Raycast(transform.position, directionToPlayer, out RaycastHit hit, distanceToPlayer))
         {
             // If the first thing hit is the player, they are in sight
             if (hit.transform.CompareTag("Player"))
             {
                 return true;
+            }
+        }
             }
         }
 
@@ -101,8 +117,11 @@ public class EnemyAiTutorial : MonoBehaviour
 
         walkPoint = new Vector3(transform.position.x + randomX, transform.position.y, transform.position.z + randomZ);
 
-        if (Physics.Raycast(walkPoint, -transform.up, 2f, whatIsGround))
+        if (!Physics.Raycast(transform.position, (walkPoint - transform.position).normalized, out RaycastHit hit, Vector3.Distance(transform.position, walkPoint)))
+        {
+            // If raycast does NOT hit anything, set it as the new walkPoint
             walkPointSet = true;
+        }
     }
 
     private void ChasePlayer()
