@@ -16,7 +16,6 @@ public class DestroyProjectile : MonoBehaviour
     {
         dieParticlesFunction();
         Debug.Log("Collided with: " + collision.gameObject.name);
-
         Destroy(gameObject);
     }
 }
