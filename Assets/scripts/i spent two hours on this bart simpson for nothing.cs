@@ -4,6 +4,7 @@ public class SphereLauncher : MonoBehaviour
 {
     public GameObject cloneSpherePrefab;  // The prefab for the sphere (to be assigned in the Inspector)
     public float launchForce = 10f;      // The force with which the sphere is launched
+    public float despawnTime = 5f;       // The time (in seconds) after which the sphere will despawn
 
     private Camera mainCamera;
 
@@ -45,6 +46,9 @@ public class SphereLauncher : MonoBehaviour
                 // Apply a force in the direction of the mouse
                 rb.AddForce(direction * launchForce, ForceMode.VelocityChange);
             }
+
+            // Destroy the cloned sphere after the specified despawn time
+            Destroy(clonedSphere, despawnTime);
         }
     }
 }
