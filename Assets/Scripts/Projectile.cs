@@ -4,7 +4,7 @@ using UnityEngine.UIElements;
 
 public class Projectile : MonoBehaviour
 {
-    public float speed = 10f;
+    public float speed = 200f;
     public int damage = 10;
 
     private Transform target;
@@ -12,16 +12,17 @@ public class Projectile : MonoBehaviour
     public void SetTarget(Transform player)
     {
         this.target = player;
+        transform.Rotate(player.position - transform.position);
         Vector3 direction = (player.position - transform.position).normalized;
         GetComponent<Rigidbody>().linearVelocity = direction * speed;
         //transform.Rotate(Vector3.up, -90f);
-
+        Debug.Log(direction);
         
     }
 
     void Update()
     {
-          transform.Rotate(Vector3.right * 480f * Time.deltaTime, Space.Self);
+        transform.Rotate(Vector3.right * 480f * Time.deltaTime, Space.Self);
     }
 
 

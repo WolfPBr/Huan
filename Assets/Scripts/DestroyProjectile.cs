@@ -6,6 +6,20 @@ public class DestroyProjectile : MonoBehaviour
 
     private ParticleSystem dieParticlesInstance;
 
+    public GameObject gameObject;
+
+    private void Start()
+    {
+        GetComponent<Collider>().enabled = false;
+        Physics.IgnoreLayerCollision(LayerMask.NameToLayer("WhatIsProjectile"), LayerMask.NameToLayer("WhatIsProjectile"));
+        Invoke(nameof(EnableCollision), 0.1f);
+    }
+
+    private void EnableCollision()
+    {
+        GetComponent<Collider>().enabled = true;
+    }
+
 
     private void dieParticlesFunction()
     {
@@ -16,6 +30,6 @@ public class DestroyProjectile : MonoBehaviour
     {
         dieParticlesFunction();
         Debug.Log("Collided with: " + collision.gameObject.name);
-        Destroy(GameObject);
+        Destroy(gameObject);
     }
 }
