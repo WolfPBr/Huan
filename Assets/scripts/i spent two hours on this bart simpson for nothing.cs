@@ -17,7 +17,7 @@ public class SphereLauncher : MonoBehaviour
     void Update()
     {
         // Check if the left mouse button is clicked
-        if (Input.GetMouseButtonDown(0)) // 0 is the left mouse button
+        if (Input.GetButtonDown("Fire1")) // 0 is the left mouse button
         {
             LaunchSphere();
         }
