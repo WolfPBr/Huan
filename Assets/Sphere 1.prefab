@@ -346,6 +346,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dieParticles: {fileID: 879134091025543755, guid: 760687d1aeab12a4a866c8d9b5f01714, type: 3}
+  gameObject: {fileID: 3130492037171280316}
 --- !u!1 &3259713381991842374
 GameObject:
   m_ObjectHideFlags: 0

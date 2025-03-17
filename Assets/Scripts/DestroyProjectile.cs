@@ -5,7 +5,7 @@ public class DestroyProjectile : MonoBehaviour
     [SerializeField] private ParticleSystem dieParticles;
 
     private ParticleSystem dieParticlesInstance;
-
+    public GameObject gameObject;
 
     private void dieParticlesFunction()
     {
@@ -16,6 +16,6 @@ public class DestroyProjectile : MonoBehaviour
     {
         dieParticlesFunction();
         Debug.Log("Collided with: " + collision.gameObject.name);
-        Destroy(GameObject);
+        Destroy(gameObject);
     }
 }

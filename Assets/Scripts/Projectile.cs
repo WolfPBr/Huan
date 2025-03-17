@@ -9,14 +9,31 @@ public class Projectile : MonoBehaviour
 
     private Transform target;
 
+    public Transform player;
+
+    private void Start()
+    {
+        player = GameObject.FindWithTag("Player").transform; // Find the player dynamically
+
+        if (player != null)
+        {
+            Vector3 direction = player.position - transform.position; // Calculate direction
+            transform.rotation = Quaternion.LookRotation(direction); // Rotate towards player
+        }
+        else
+        {
+            Debug.LogError("wtf why not work?");
+        }
+    }
+
+
     public void SetTarget(Transform player)
     {
         this.target = player;
         Vector3 direction = (player.position - transform.position).normalized;
         GetComponent<Rigidbody>().linearVelocity = direction * speed;
+        Debug.Log("found you!");
         //transform.Rotate(Vector3.up, -90f);
-
-        
     }
 
     void Update()

@@ -137,6 +137,7 @@ public class EnemyAiTutorial : MonoBehaviour
         if (!alreadyAttacked)
         {
             // Spawn and throw projectile
+            agent.SetDestination(transform.position);
             GameObject projectile = Instantiate(projectilePrefab, attackPoint.position, Quaternion.identity);
             projectile.GetComponent<Projectile>().SetTarget(player);
 
