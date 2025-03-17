@@ -144,21 +144,21 @@ public class EnemyAiTutorial : MonoBehaviour
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttacks);
         }
-    }
-    private void ResetAttack()
-    {
-        alreadyAttacked = false;
-    }
+        }
+        private void ResetAttack()
+        {
+            alreadyAttacked = false;
+        }
 
-    public void TakeDamage(int damage)
-    {
-        health -= damage;
+        public void TakeDamage(int damage)
+        {
+            health -= damage;
 
-        if (health <= 0) Invoke(nameof(DestroyEnemy), 0.5f);
-    }
-    private void DestroyEnemy()
-    {
-        Destroy(gameObject);
+            if (health <= 0) Invoke(nameof(DestroyEnemy), 0.5f);
+        }
+        private void DestroyEnemy()
+        {
+            Destroy(gameObject);
     }
 
 }
