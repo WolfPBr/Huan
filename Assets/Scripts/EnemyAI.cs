@@ -14,22 +14,20 @@ public class EnemyAiTutorial : MonoBehaviour
 
     public float health;
 
-    //Patroling
+    
     public Vector3 walkPoint;
     bool walkPointSet;
     public float walkPointRange;
 
-    //Attacking
     public float timeBetweenAttacks;
     bool alreadyAttacked;
 
-    //States
     public float sightRange, attackRange;
     public bool playerInSightRange, playerInAttackRange;
 
     [Header("projectile stuff")]
     public GameObject projectilePrefab;
-    public Transform attackPoint; // A point from which the projectile spawns
+    public Transform attackPoint;
 
     [Range(0, 360)]
     public float angle;
@@ -43,7 +41,8 @@ public class EnemyAiTutorial : MonoBehaviour
 
     private void Update()
     {
-        // Check if the player is within sight and attack range
+        if (alreadyAttacked) return;
+
         playerInSightRange = Physics.CheckSphere(transform.position, sightRange, whatIsPlayer);
         playerInAttackRange = Physics.CheckSphere(transform.position, attackRange, whatIsPlayer);
 
@@ -80,10 +79,8 @@ public class EnemyAiTutorial : MonoBehaviour
             {
                 float distanceToPlayer = Vector3.Distance(transform.position, player.position);
 
-                        // Raycast from enemy to player
         if (Physics.Raycast(transform.position, directionToPlayer, out RaycastHit hit, distanceToPlayer))
         {
-            // If the first thing hit is the player, they are in sight
             if (hit.transform.CompareTag("Player"))
             {
                 return true;
@@ -92,7 +89,7 @@ public class EnemyAiTutorial : MonoBehaviour
             }
         }
 
-        return false; // Player is behind a wall or object
+        return false;
     }
 
 
@@ -105,13 +102,11 @@ public class EnemyAiTutorial : MonoBehaviour
 
         Vector3 distanceToWalkPoint = transform.position - walkPoint;
 
-        //Walkpoint reached
         if (distanceToWalkPoint.magnitude < 1f)
             walkPointSet = false;
     }
     private void SearchWalkPoint()
     {
-        //Calculate random point in range
         float randomZ = Random.Range(-walkPointRange, walkPointRange);
         float randomX = Random.Range(-walkPointRange, walkPointRange);
 
@@ -119,7 +114,6 @@ public class EnemyAiTutorial : MonoBehaviour
 
         if (!Physics.Raycast(transform.position, (walkPoint - transform.position).normalized, out RaycastHit hit, Vector3.Distance(transform.position, walkPoint)))
         {
-            // If raycast does NOT hit anything, set it as the new walkPoint
             walkPointSet = true;
         }
     }
@@ -136,29 +130,31 @@ public class EnemyAiTutorial : MonoBehaviour
 
         if (!alreadyAttacked)
         {
-            // Spawn and throw projectile
+            if (alreadyAttacked) return;
+
             agent.SetDestination(transform.position);
             GameObject projectile = Instantiate(projectilePrefab, attackPoint.position, Quaternion.identity);
             projectile.GetComponent<Projectile>().SetTarget(player);
 
             alreadyAttacked = true;
             Invoke(nameof(ResetAttack), timeBetweenAttacks);
+            agent.SetDestination(transform.position);
         }
-        }
-        private void ResetAttack()
-        {
-            alreadyAttacked = false;
-        }
+    }
+    private void ResetAttack()
+    {
+        alreadyAttacked = false;
+    }
 
-        public void TakeDamage(int damage)
-        {
-            health -= damage;
+    public void TakeDamage(int damage)
+    {
+        health -= damage;
 
-            if (health <= 0) Invoke(nameof(DestroyEnemy), 0.5f);
-        }
-        private void DestroyEnemy()
-        {
-            Destroy(gameObject);
+        if (health <= 0) Invoke(nameof(DestroyEnemy), 0.5f);
+    }
+    private void DestroyEnemy()
+    {
+        Destroy(gameObject);
     }
 
 }
